@@ -38,51 +38,79 @@ body {
     radial-gradient(ellipse at 88% 85%, rgba(230,57,70,0.07) 0%, transparent 40%);
 }
 
-/* ── NAV TABS ── */
-.app-header {
-  position: sticky; top:0; z-index:100;
-  background: rgba(250,248,245,0.92);
+/* ── LAYOUT ── */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.app-sidebar {
+  width: 160px;
+  flex-shrink: 0;
+  position: sticky; top: 0;
+  height: 100vh;
+  background: rgba(250,248,245,0.97);
   backdrop-filter: blur(12px);
-  border-bottom: 1.5px solid var(--border);
-  padding: 0 16px;
+  border-right: 1.5px solid var(--border);
+  display: flex; flex-direction: column;
+  padding: 20px 12px 28px;
+  z-index: 100;
 }
 
 .header-top {
-  display: flex; align-items: center; gap: 10px;
-  padding: 14px 0 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid var(--border);
+  margin-bottom: 16px;
+  text-align: center;
 }
 
-.header-top .logo { font-size: 1.8rem; line-height:1; }
+.header-top .logo { font-size: 2.2rem; line-height:1; }
 
 .header-top h1 {
   font-family: 'Baloo 2', sans-serif;
-  font-size: 1.25rem; font-weight: 900;
+  font-size: 1rem; font-weight: 900;
   letter-spacing: 0.02em;
+  line-height: 1.3;
 }
 .header-top h1 span { color: var(--red); }
 
 .nav-tabs {
-  display: flex; gap: 0;
-  border-top: 1.5px solid var(--border);
+  display: flex; flex-direction: column; gap: 6px;
+  flex: 1;
 }
 
 .nav-tab {
-  flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px;
-  padding: 10px 4px 8px;
-  font-size: 0.82rem; font-weight: 700;
+  display: flex; align-items: center; gap: 9px;
+  padding: 11px 14px;
+  font-size: 0.92rem; font-weight: 700;
   color: var(--text-muted);
   cursor: pointer;
   border: none; background: none;
   font-family: 'Noto Sans TC', sans-serif;
-  border-bottom: 3px solid transparent;
-  transition: color 0.2s, border-color 0.2s;
-  position: relative; top: 1px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid transparent;
+  transition: color 0.2s, background 0.2s, border-color 0.2s;
+  text-align: left; width: 100%;
 }
-.nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-.nav-tab .tab-icon { font-size: 1rem; }
+.nav-tab:hover { background: var(--gold-pale); color: var(--text); }
+.nav-tab.active {
+  color: var(--gold);
+  background: var(--gold-pale);
+  border-left-color: var(--gold);
+}
+.nav-tab .tab-icon { font-size: 1.15rem; flex-shrink: 0; }
+
+/* ── MAIN CONTENT ── */
+.app-main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
 
 /* ── PAGES ── */
-.page { display: none; padding: 20px 16px 80px; max-width: 520px; margin: 0 auto; }
+.page { display: none; padding: 28px 32px 60px; max-width: 860px; margin: 0 auto; }
 .page.active { display: block; }
 
 /* ── COUNTER BANNER ── */
@@ -445,8 +473,13 @@ input[type="text"]:focus {
   display: flex; align-items: center; gap: 8px;
 }
 
-/* Stats page */
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+/* Stats bottom cards side by side */
+.stats-cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
 .stat-card {
   background: var(--card);
   border: 1.5px solid var(--border);
@@ -461,13 +494,39 @@ input[type="text"]:focus {
 }
 .stat-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 700; margin-top: 2px; }
 
+/* Register page layout */
+#page-register {
+  display: none;
+  max-width: 600px;
+  margin: 0 auto;
+}
+#page-register.active {
+  display: block;
+}
+
+/* Calendar page 2-col layout */
+#page-calendar {
+  display: none;
+}
+#page-calendar.active {
+  display: block;
+}
+.cal-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
 .divider { height: 1px; background: var(--border); margin: 6px 0 16px; }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="app-header">
+<div class="app-layout">
+
+<!-- SIDEBAR -->
+<div class="app-sidebar">
   <div class="header-top">
     <div class="logo">💯</div>
     <h1>百分卷<span>登記系統</span></h1>
@@ -487,6 +546,9 @@ input[type="text"]:focus {
     </button>
   </div>
 </div>
+
+<!-- MAIN CONTENT -->
+<div class="app-main">
 
 <!-- ══════════ PAGE: REGISTER ══════════ -->
 <div class="page active" id="page-register">
@@ -575,6 +637,7 @@ input[type="text"]:focus {
 <!-- ══════════ PAGE: CALENDAR ══════════ -->
 <div class="page" id="page-calendar">
   <div class="page-title pop">📅 日曆查詢</div>
+  <div class="cal-layout">
   <div class="card pop">
     <div class="cal-header">
       <button class="cal-nav" onclick="calPrev()">‹</button>
@@ -589,6 +652,7 @@ input[type="text"]:focus {
       <span class="date-tag" id="selectedDateTag">今天</span>
     </div>
     <div id="dayRecordList"><div class="empty-state"><div class="empty-icon">📭</div><div>請選擇日期</div></div></div>
+  </div>
   </div>
 </div>
 
@@ -614,6 +678,7 @@ input[type="text"]:focus {
 <div class="page" id="page-stats">
   <div class="page-title pop">📊 統計總覽</div>
   <div class="stats-grid pop" id="statsGrid"></div>
+  <div class="stats-cards-row">
   <div class="card pop" style="animation-delay:0.1s">
     <div class="card-title">🏆 各科目登記次數</div>
     <div id="subjectStats"></div>
@@ -621,6 +686,7 @@ input[type="text"]:focus {
   <div class="card pop" style="animation-delay:0.15s">
     <div class="card-title">👤 學生登記排行</div>
     <div id="studentStats"></div>
+  </div>
   </div>
 </div>
 
@@ -673,6 +739,9 @@ input[type="text"]:focus {
     <button class="btn-modal-cancel" onclick="closeModal()">取消</button>
   </div>
 </div>
+
+</div><!-- end app-main -->
+</div><!-- end app-layout -->
 
 <div class="toast" id="toast"></div>
 
@@ -909,15 +978,27 @@ function renderStats() {
 
   // Student stats
   const stuMap = {};
-  records.forEach(r => { stuMap[r.name] = (stuMap[r.name]||0) + r.qty; });
-  const stuSorted = Object.entries(stuMap).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  const maxStu = stuSorted[0]?.[1] || 1;
-  document.getElementById('studentStats').innerHTML = stuSorted.map(([name,cnt],i) => `
-    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1.5px solid var(--border)">
+  records.forEach(r => {
+    if (!stuMap[r.name]) stuMap[r.name] = { qty: 0, pts: 0 };
+    stuMap[r.name].qty += r.qty;
+    stuMap[r.name].pts += r.points * r.qty;
+  });
+  const stuSorted = Object.entries(stuMap).sort((a,b)=>b[1].qty-a[1].qty).slice(0,10);
+  document.getElementById('studentStats').innerHTML = stuSorted.map(([name,data],i) => `
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1.5px solid var(--border)">
       <div style="width:24px;height:24px;border-radius:50%;background:${i<3?'var(--gold)':'var(--border)'};color:${i<3?'white':'var(--text-muted)'};display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:900;flex-shrink:0">${i+1}</div>
       <div style="font-weight:700;font-size:0.9rem;flex:1">${name}</div>
-      <div style="font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:900;color:var(--gold)">${cnt}</div>
-      <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600">張</div>
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+        <div style="display:flex;align-items:baseline;gap:2px">
+          <span style="font-family:'Baloo 2',sans-serif;font-size:1.05rem;font-weight:900;color:var(--gold)">${data.qty}</span>
+          <span style="font-size:0.72rem;color:var(--text-muted);font-weight:600">張</span>
+        </div>
+        <div style="width:1px;height:14px;background:var(--border)"></div>
+        <div style="display:flex;align-items:baseline;gap:2px">
+          <span style="font-family:'Baloo 2',sans-serif;font-size:1.05rem;font-weight:900;color:var(--red)">${data.pts}</span>
+          <span style="font-size:0.72rem;color:var(--text-muted);font-weight:600">元</span>
+        </div>
+      </div>
     </div>`).join('') || '<div class="empty-state" style="padding:20px 0"><div>尚無資料</div></div>';
 }
 
